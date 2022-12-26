@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 
 import { useStateContext } from '../context';
 import { money } from '../assets';
-import { CustomButton, FormField } from '../components';
+import { CustomButton, FormField, Loader } from '../components';
 import { checkIfImage } from '../utils';
 
 const CreateCampaign = () => {
@@ -28,14 +28,14 @@ const CreateCampaign = () => {
     e.preventDefault();
 
     checkIfImage(form.image, async (exists) => {
-      if (exists) {
-        setIsLoading(true);
-        await createCampaign({ ...form, target: ethers.utils.parseUnits(form.target, 18)});
+      if(exists) {
+        setIsLoading(true)
+        await createCampaign({ ...form, target: ethers.utils.parseUnits(form.target, 18)})
         setIsLoading(false);
         navigate('/');
       } else {
-        alert('Provide valid image url')
-        setForm({ ...form, image: '' })
+        alert('Provide valid image URL')
+        setForm({ ...form, image: '' });
       }
     })
   }

@@ -6,11 +6,11 @@ import { ethers } from 'ethers';
 const StateContext = createContext();
 
 export const StateContextProvider = ({ children }) => {
-  const { contract } = useContract ('0x35EeDE02d52C830353b50c31ae498612029Cd308');
+  const { contract } = useContract('0xD69aaBdd2eE3D1047b8EE699379D05257B4d9540');
   const { mutateAsync: createCampaign } = useContractWrite(contract, 'createCampaign');
 
   const address = useAddress();
-  const connect = useMetamask('connect');
+  const connect = useMetamask();
 
   const publishCampaign = async (form) => {
     try {
@@ -30,9 +30,9 @@ export const StateContextProvider = ({ children }) => {
   }
 
   const getCampaigns = async () => {
-    const campaings = await contract.call('getCampaigns');
+    const campaigns = await contract.call('getCampaigns');
 
-    const parsedCampaings = campaings.map((campaign, i) => ({
+    const parsedCampaings = campaigns.map((campaign, i) => ({
       owner: campaign.owner,
       title: campaign.title,
       description: campaign.description,
@@ -43,17 +43,17 @@ export const StateContextProvider = ({ children }) => {
       pId: i
     }));
 
-    console.log(parsedCampaings);
+    return parsedCampaings;
   }
 
   return (
     <StateContext.Provider
-      value={{
-        address, 
-        contract, 
+      value={{ 
+        address,
+        contract,
         connect,
         createCampaign: publishCampaign,
-        getCampaigns
+        getCampaigns,
       }}
     >
       {children}
@@ -61,4 +61,4 @@ export const StateContextProvider = ({ children }) => {
   )
 }
 
-export const useStateContext = () => useContext (StateContext);
+export const useStateContext = () => useContext(StateContext);
